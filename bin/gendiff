@@ -31,7 +31,8 @@ function genDiff(string $path1, string $path2, $format)
 {
   $file1 = new DiffFinder($path1);
   $file2 = new DiffFinder($path2);
-  // return $file1->diff($file2)->format($format)->outer();
+  // return $file1->getDiff($file2, $format);
+
 }
 
 // genDiff($inputData->args['<firstFile>'], $inputData->args['<secondFile>'], $inputData->args['--format']);
