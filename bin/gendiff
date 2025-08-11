@@ -2,7 +2,7 @@
 <?php
 
 require_once __DIR__ . "/../vendor/autoload.php";
-use App\DiffFinder;
+use function Differ\genDiff;
 
 $doc = <<<DOC
 Generate diff
@@ -27,13 +27,10 @@ $params = array(
 
 $inputData = Docopt::handle($doc, $params);
 
-function genDiff(string $path1, string $path2, $format)
-{
-  $file1 = new DiffFinder($path1);
-  $file2 = new DiffFinder($path2);
-  // return $file1->getDiff($file2, $format);
-
+try {
+  $result = genDiff($inputData->args['<firstFile>'], $inputData->args['<secondFile>'], $inputData->args['--format']);
+} catch (\InvalidArgumentException $e) {
+  echo $e->getMessage();
 }
 
-// genDiff($inputData->args['<firstFile>'], $inputData->args['<secondFile>'], $inputData->args['--format']);
-print_r($inputData);
+print_r($result);

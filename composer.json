@@ -2,7 +2,8 @@
     "name": "hexlet/code",
     "description": "php-project-45",
     "autoload": {
-        "psr-4": {"App\\": "src/"}
+        "psr-4": {"Differ\\": "src/"},
+        "files": ["src/genDiff.php"]
     },
     "require": {
         "docopt/docopt": "^1.0",
