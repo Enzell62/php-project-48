@@ -10,8 +10,8 @@ namespace Differ;
  *      [
  *          [
  *              'key' => (string),
- *              'value1' => (mixed),
- *              'source1' => (string) 'file1' | 'file2',
+ *              'value' => (mixed),
+ *              'source' => (string) 'file1' | 'file2' | null,
  *              'status' => (string) 'unique' | 'both' | 'modified'
  *          ]
  *      ]

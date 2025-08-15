@@ -1,0 +1,1 @@
+[{"key":"FirstStroke","value":"FirstValue","source":null,"status":"both"},{"key":"verbose","value":true,"source":"file1","status":"modified"},{"key":"verbose","value":false,"source":"file2","status":"modified"},{"key":"sugar","value":342,"source":"file1","status":"modified"},{"key":"sugar","value":45,"source":"file2","status":"modified"}]
