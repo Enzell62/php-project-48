@@ -43,4 +43,4 @@ jobs:
       #     coverageLocations: build/logs/clover.xml:clover
       #     debug: true
       - name: Run Tests
-        run: make tests
+        run: make test
