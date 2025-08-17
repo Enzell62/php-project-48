@@ -12,6 +12,5 @@ function genDiff(string $path1, string $path2, string $format = "stylish")
     $file2 = Parser::parse($path2);
 
     $dif = Differ::compare($file1, $file2);
-    $formatted = Formatter::format($dif, $format);
-    return $formatted;
+    return Formatter::format($dif, $format);
 }
