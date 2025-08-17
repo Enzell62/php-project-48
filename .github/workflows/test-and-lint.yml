@@ -45,7 +45,7 @@ jobs:
       - name: Run Tests
         run: make test
       - name: Run Tests-coverage
-        run: tests-coverage-log
+        run: make tests-coverage-log
       # SonarQube, need to add api token to guthub settings
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
