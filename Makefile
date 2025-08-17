@@ -12,3 +12,6 @@ tests-coverage:
 
 tests-coverage-log:
 	XDEBUG_MODE=coverage composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml
+
+self-test:
+	echo WORKS
