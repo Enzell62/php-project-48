@@ -2,12 +2,12 @@
 
 namespace Differ\Parser;
 
+use Symfony\Component\Yaml\Yaml;
+
 class YamlParser
 {
-    public static function parse($file)
+    public static function parse(string $content): array
     {
-        echo "YAML PARSER" . PHP_EOL;
-        print_r(self::class);
-        print_r($file);
+        return Yaml::parse($content);
     }
 }

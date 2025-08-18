@@ -4,6 +4,7 @@ namespace Differ\Parser;
 
 use Differ\Parser\JsonParser;
 use Differ\Parser\YamlParser;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 /**
  * Принимает путь к файлу, проверяет существует ли, выбирает какой парсер применить
@@ -33,6 +34,10 @@ class Parser
             throw new \InvalidArgumentException('Error: File extension "' . $extension . '" not supported.');
         }
         $parserName = $map[$extension];
-        return $parserName::parse($content);
+        try {
+            return $parserName::parse($content);
+        } catch (ParseException $e) {
+            throw new \InvalidArgumentException('Unable to parse the YAML string: ' . $e->getMessage(), previous: $e);
+        }
     }
 }

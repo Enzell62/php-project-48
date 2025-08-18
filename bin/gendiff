@@ -30,7 +30,9 @@ $inputData = Docopt::handle($doc, $params);
 try {
   $result = genDiff($inputData->args['<firstFile>'], $inputData->args['<secondFile>'], $inputData->args['--format']);
 } catch (\InvalidArgumentException $e) {
-  echo $e->getMessage();
+  fwrite(STDERR, $e->getMessage());
+  exit(1);
 }
 
 print_r($result);
+exit(0);
