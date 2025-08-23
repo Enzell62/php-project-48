@@ -28,7 +28,8 @@ class Differ
         $result = [];
         $uniquesFile1 = array_diff(array_keys($file1), array_keys($file2));
         foreach ($uniquesFile1 as $intersectKey) {
-            if (is_array($file1[$intersectKey])) { // для рекурсии запускаем сравнение значения самим с собой, чтобы разметить
+            if (is_array($file1[$intersectKey])) {
+                // для рекурсии запускаем сравнение значения самим с собой, чтобы разметить
                 $value = self::compare($file1[$intersectKey], $file1[$intersectKey]);
             } else {
                 $value = $file1[$intersectKey];
@@ -38,7 +39,8 @@ class Differ
 
         $uniquesFile2 = array_diff(array_keys($file2), array_keys($file1));
         foreach ($uniquesFile2 as $intersectKey) {
-            if (is_array($file2[$intersectKey])) { // для рекурсии запускаем сравнение значения самим с собой, чтобы разметить
+            if (is_array($file2[$intersectKey])) {
+                // для рекурсии запускаем сравнение значения самим с собой, чтобы разметить
                 $value = self::compare($file2[$intersectKey], $file2[$intersectKey]);
             } else {
                 $value = $file2[$intersectKey];
