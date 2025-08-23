@@ -1,6 +1,9 @@
 <?php
 
 
+$ex1 = [2 => "as", 3 => "as", 4 => "as"];
+$ex2 = [1 => "as", 2 => "as", 3 => "as"];
 
+$result = array_diff_key($ex1, $ex2);
 
-print_r(json_decode(file_get_contents(__DIR__ . '/fixtures/fixturesFormatter1.json'), true));
+var_dump(null === false);
