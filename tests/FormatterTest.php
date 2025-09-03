@@ -74,16 +74,29 @@ class FormatterTest extends TestCase
         fee: 100500
     }
 }';
+        $excepted4 = "Property 'common.follow' was added with value: false
+Property 'common.setting2' was removed
+Property 'common.setting3' was update. From true to null
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with value: [complex value]
+Property 'common.setting6.doge.wow' was update. From '' to 'so much'
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'group1.baz' was update. From 'bas' to 'bars'
+Property 'group1.nest' was update. From [complex value] to 'str'
+Property 'group2' was removed
+Property 'group3' was added with value: [complex value]
+";
         return [
             'case 1' => [$fixture1, $excepted1],
             'case 2' => [$fixture2, $excepted2],
-            'case 3' => [$fixture3, $excepted3]
+            'case 3' => [$fixture3, $excepted3],
+            'PlainFormat' => [$fixture3, $excepted4, 'plain']
         ];
     }
 
     #[DataProvider('additionProvider')]
-    public function testFormatter($fixture, $excepted)
+    public function testFormatter($fixture, $excepted, $format = 'stylish')
     {
-        $this->assertEquals($excepted, Formatter::format($fixture));
+        $this->assertEquals($excepted, Formatter::format($fixture, $format));
     }
 }

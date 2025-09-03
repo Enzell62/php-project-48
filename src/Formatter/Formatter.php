@@ -22,7 +22,7 @@ class Formatter
     //     });
     // }
 
-    private static function sort(array $array)
+    public static function sort(array $array)
     {
         $newArray = sortBy($array, function ($item) {
             return $item['key'];
@@ -40,7 +40,7 @@ class Formatter
         }, $newArray);
     }
 
-    private static function arrayBoolToString(array $array): array
+    public static function arrayBoolToString(array $array): array
     {
         return array_map(function ($item) {
             $value = is_Bool($item['value']) ? ($item['value'] ? 'true' : 'false') : $item['value'];
