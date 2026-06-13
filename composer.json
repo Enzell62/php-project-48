@@ -22,7 +22,6 @@
             "Differ\\": "src/"
         },
         "files": [
-            "src/genDiff.php",
             "src/Formatter/Stylish/Stylish.php",
             "src/Formatter/Plain/Plain.php",
             "src/Formatter/Json/Json.php",
