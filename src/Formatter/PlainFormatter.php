@@ -1,73 +1,45 @@
 <?php
 
-namespace Differ\Formatter;
+namespace Differ\Formatter\Plain;
 
-class PlainFormatter
+function getPlainFormattedValue(mixed $value): string
 {
-    public static function flatten(array $array, $parent = ''): array
-    {
-        return array_reduce($array, function ($acc, $item) use ($parent) {
-            $domen = implode('.', array_filter([$parent, $item['key']], fn($item) => $item !== ''));
-            if (is_Array($item['value']) && $item['status'] == 'both') {
-                $acc = array_merge($acc, self::flatten($item['value'], $domen));
-                return $acc;
-            } elseif (is_array($item['value']) && ($item['status'] == 'unique' || $item['status'] == 'modified')) {
-                $item['key'] = $domen;
-                $item['value'] = '[complex value]';
-                $acc[] = $item;
-            } elseif ($item['status'] == 'both') {
-                return $acc;
-            } elseif ($item['status'] == 'unique' || $item['status'] == 'modified') {
-                $item['key'] = $domen;
-                $acc[] = $item;
-            }
-            return $acc;
-        }, []);
+    if (is_null($value)) {
+        return 'null';
     }
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
+    }
+    if (is_array($value)) {
+        return '[complex value]';
+    }
+    if (is_string($value)) {
+        return "'{$value}'";
+    }
+    return (string)$value;
+}
 
-    public static function addQuotes(string $str): string
-    {
-        if (!(in_array($str, ['null', 'false', 'true','[complex value]']) || is_numeric($str))) {
-                $str = "'" . $str . "'";
+function plain(array $diff, string $path = ''): string
+{
+    $result = array_map(function ($node) use ($path) {
+        $currentPath = $path . $node['key'];
+        switch ($node['type']) {
+            case 'nested':
+                return plain($node['children'], $currentPath . '.');
+            case 'added':
+                $formattedValue = getPlainFormattedValue($node['value']);
+                return "Property '{$currentPath}' was added with value: {$formattedValue}";
+            case 'removed':
+                return "Property '{$currentPath}' was removed";
+            case 'changed':
+                $formattedOldValue = getPlainFormattedValue($node['oldValue']);
+                $formattedNewValue = getPlainFormattedValue($node['newValue']);
+                return "Property '{$currentPath}' was updated. From {$formattedOldValue} to {$formattedNewValue}";
+            case 'unchanged':
+                return null;
+            default:
+                throw new \Exception("Unknown node type: {$node['type']}");
         }
-        return $str;
-    }
-
-    private static function getPlainString(array $array): string
-    {
-        $coll = $array;
-        return array_reduce($array, function ($acc, $item) use ($coll) {
-            $key = $item['key'];
-            $value = 'undifined';
-            $status = 'unfifined';
-            if ($item['status'] == 'unique' && $item['source'] == 'file1') {
-                $status = 'removed';
-                $value = '';
-            } elseif ($item['status'] == 'unique' && $item['source'] == 'file2') {
-                $status = 'added with value: ';
-                $value = self::addQuotes($item['value']);
-            } elseif ($item['status'] == 'modified' && $item['source'] == 'file1') {
-                $status = 'update. From ';
-                $subValue1 = self::addQuotes($item['value']);
-                $subValue2 = array_reduce($coll, function ($acc, $item) use ($key) {
-                    if ($item['key'] == $key && $item['source'] == 'file2') {
-                        $acc = self::addQuotes($item['value']);
-                        return $acc;
-                    }
-                    return $acc;
-                }, "");
-                $value = "{$subValue1} to {$subValue2}";
-            } else {
-                return $acc;
-            }
-            $acc = $acc . "Property '{$key}' was {$status}{$value}" . PHP_EOL;
-            return $acc;
-        }, '');
-    }
-
-    public static function format(array $array)
-    {
-        $flattenedArray = self::flatten($array);
-        return self::getPlainString($flattenedArray);
-    }
+    }, $diff);
+    return implode("\n", array_filter($result));
 }

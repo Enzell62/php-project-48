@@ -1,16 +1,28 @@
 <?php
 
-namespace Differ;
+namespace Differ\GenDiff;
 
-use Differ\Parser\Parser;
+use Differ\Parser;
 use Differ\Differ;
-use Differ\Formatter\Formatter;
+use function Differ\Formatter\format;
 
-function genDiff(string $path1, string $path2, string $format = "stylish")
+function genDiff(string $path1, string $path2, string $format = 'stylish'): string
 {
-    $file1 = Parser::parse($path1);
-    $file2 = Parser::parse($path2);
+    $data1 = Parser\parse(getData($path1));
+    $data2 = Parser\parse(getData($path2));
+    $diff = Differ\compare($data1, $data2);
+    return format($diff, $format);
+}
 
-    $dif = Differ::compare($file1, $file2);
-    return Formatter::format($dif, $format);
+function getData(string $path): array
+{
+    if (!file_exists($path)) {
+        throw new \Exception("File not found: {$path}");
+    }
+    $content = file_get_contents($path);
+    if ($content === false) {
+        throw new \Exception("Failed to read file: {$path}");
+    }
+    $extension = pathinfo($path, PATHINFO_EXTENSION);
+    return [$content, $extension];
 }
