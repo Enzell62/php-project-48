@@ -1,0 +1,19 @@
+install:
+	composer install
+	composer update
+	ln -s $(pwd)/bin/gendiff /usr/local/bin/gendiff
+
+lint:
+	composer exec --verbose phpcs -- --standard=PSR12 src bin
+
+test:
+	composer exec --verbose phpunit tests/GendiffTest.php
+
+tests-coverage:
+	XDEBUG_MODE=coverage composer exec --verbose phpunit tests/GendiffTest.php -- --coverage-text
+
+tests-coverage-log:
+	XDEBUG_MODE=coverage composer exec --verbose phpunit tests/GendiffTest.php -- --coverage-clover build/logs/clover.xml
+
+self-test:
+	echo WORKS

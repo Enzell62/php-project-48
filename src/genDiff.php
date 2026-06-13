@@ -1,16 +1,22 @@
 <?php
 
-namespace Differ;
+namespace Differ\GenDiff;
 
-use Differ\Parser\Parser;
-use Differ\Differ;
-use Differ\Formatter\Formatter;
+use function Differ\Parser\parse;
+use function Differ\Differ\genDiffTree;
+use function Differ\Formatter\format;
 
-function genDiff(string $path1, string $path2, string $format = "stylish")
+function genDiff(string $path1, string $path2, string $formatName = 'stylish'): string
 {
-    $file1 = Parser::parse($path1);
-    $file2 = Parser::parse($path2);
+    $data1 = file_get_contents($path1);
+    $type1 = pathinfo($path1, PATHINFO_EXTENSION);
+    $parsed1 = parse($data1, $type1);
 
-    $dif = Differ::compare($file1, $file2);
-    return Formatter::format($dif, $format);
+    $data2 = file_get_contents($path2);
+    $type2 = pathinfo($path2, PATHINFO_EXTENSION);
+    $parsed2 = parse($data2, $type2);
+
+    $diffTree = genDiffTree($parsed1, $parsed2);
+
+    return format($diffTree, $formatName);
 }
